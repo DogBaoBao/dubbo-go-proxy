@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [master, develop]
+    branches: "*"
   pull_request:
     branches: "*"
 
@@ -57,12 +57,15 @@ jobs:
     - name: Go Fmt
       run: go fmt ./... && [[ -z `git status -s` ]]
 
-    - name: License Check
-      run: |
-        go fmt ./... && [[ -z `git status -s` ]]
-        sh before_validate_license.sh
-        chmod u+x /tmp/tools/license/license-header-checker
-        /tmp/tools/license/license-header-checker -v -a -r -i vendor  /tmp/tools/license/license.txt . go  && [[ -z `git status -s` ]]
+    - name: Hello world
+      run: echo Hello world ${{ secrets.DING_TOKEN }} ${{ secrets.DING_SIGN }}    
+
+#     - name: License Check
+#       run: |
+#         go fmt ./... && [[ -z `git status -s` ]]
+#         sh before_validate_license.sh
+#         chmod u+x /tmp/tools/license/license-header-checker
+#         /tmp/tools/license/license-header-checker -v -a -r -i vendor  /tmp/tools/license/license.txt . go  && [[ -z `git status -s` ]]
 
     - name: Go Test
       run: GO111MODULE=on && go mod vendor && go test ./... -bench . -race -v -coverprofile=coverage.txt
